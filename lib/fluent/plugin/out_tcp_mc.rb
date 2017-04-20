@@ -17,8 +17,8 @@ require 'fluent/plugin/output'
 require 'time'
 
 module Fluent
-  class Tcp_multiOutput < BufferedOutput
-    Plugin.register_output('tcp_multi', self)
+  class Tcp_mcOutput < BufferedOutput
+    Plugin.register_output('tcp_mc', self)
     
     helpers :compat_parameters, :formatter, :inject
 
