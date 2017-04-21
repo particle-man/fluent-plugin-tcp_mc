@@ -1,4 +1,4 @@
-# fluent-plugin-tcp_multi
+# fluent-plugin-tcp_mc
 
 [Fluentd](http://fluentd.org/) output to send to generic tcp endpoints
 
@@ -11,7 +11,7 @@ The plugin currently only supports JSON output and I think buffering is kinda wo
 ### RubyGems
 
 ```
-$ gem install fluent-plugin-tcp_multi
+$ gem install fluent-plugin-tcp_mc
 ```
 
 ### Bundler
@@ -19,7 +19,7 @@ $ gem install fluent-plugin-tcp_multi
 Add following line to your Gemfile:
 
 ```ruby
-gem "fluent-plugin-tcp_multi"
+gem "fluent-plugin-tcp_mc"
 ```
 
 And then execute:
@@ -33,7 +33,7 @@ $ bundle
 You can generate configuration template:
 
 ```
-$ fluent-plugin-format-config output tcp_multi
+$ fluent-plugin-format-config output tcp_mc
 ```
 
 You can copy and paste generated documents here.
