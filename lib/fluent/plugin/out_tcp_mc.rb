@@ -15,6 +15,7 @@
 
 require 'fluent/plugin/output'
 require 'time'
+require 'yajl'
 
 module Fluent
   class Tcp_mcOutput < BufferedOutput
@@ -107,7 +108,7 @@ module Fluent
         chunk.msgpack_each do |tag, time, record|
           next unless record.is_a? Hash
           #log.debug ("#{record}")
-          sock.write("#{record.to_json}\n")
+          sock.write("#{Yajl.dump(record)}\n")
         end
       ensure
         sock.close
