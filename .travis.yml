@@ -1,22 +1,17 @@
 language: ruby
 rvm:
- - 2.5.0
-
+- 2.5.0
 env:
   global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   - secure: "GJ2Q4A+yISmLuxWlk8Yq4GypsS3u8faf5xpAVPxaz6P2pECk/scclxpKcoD9b60d+mCIHMlHxVDREhszs4o424v/rgSwCa3nCK755qnzOxfPw2QIQmzFfL+iLemnp6OpUYP+YMDdkvyTTHhYGZrTJL+aAvsixofB/ATbuPaQmuie8gHfOJT2pEh8yaTGy8jmde9drUj9RqtNhtYv/lthhRhmDMihUmMD7dIQUwyYbvTZJLGs/wo6G4OXhhxnExyXqjps5nUTl2HncU8AB13jYPUqmxRkQfBRY90VRj9qgjAXCQoJa5X9Vz74VJRIESXeLw9Bt/Vap6dlUt97QF4PWFIr7u9H/EvfFMp50ddFG/lrTJr6vVoa7nMx+B+yN0sFqbfE9PvVk8Ffp0D4LUq/iYatMthIjifGQ/HWVIkEONIbeGrbwk5PSMu8zgwkusbvtyEbtQTOEV5nb1VKqOM2DOEi5OEZmRso96yQ1x+M5LDeDMGhG36yuSJvAQMQC69TNDT+ebiRuBnw1nSBSslcUc9C4n5pnuI3hOJpYNsaOvDQ3ZTHy1b/eJ99nQZeT9IlSXYpaJVHcVlX7Dp5dMFopGkWsr2XCfMfZhFIKI+EVVAGXWtRVfFiJTPDRjM4iW7SEaADo1+EEcl7wyT++6lfkVb0tUbfQp9WvnWec/kn3ew="
-
+  - secure: S/Zo1xLgxBEP84LiCTI+b7ymfYzOIcedWYbTVT+3HETUps0iQCJT7By/zHKdBeraFJnUtPYPwFh5qUZsFHICM+pEFdOar0c/TnoMCZUgojqhWeb5MPRd64zU1smL7ArXoiq2agShZ7riz8IEZsuRWX9Z6Iq0fWU821JvOZcqPFrrXMyEYAuW7JS8oCbqbipdiaZYZTnZNAsjwVgb7iITO20amarG+qNAKriZdknAj4xKafi5PmJiCk2H+lodRIW0yvtK+hftOuhtByATEuDTB6LeYmJSl4w6boPUn2Y8ia5BrkWqr97bdWAUmsD5Wq9slhCo5w2+vWoC5vbt2gUjK5vdhfnye0bYdv+vebsOvANtfxzwrY/UFGPQon4uJIlCNJeaPT3Rs+DbXmes60vXr2J1G5DMyGmR3Y8kAI5k0+cA9aKSmIW0bvfSmrHMQWpZTDagdGfKwnwj9Echi31VavJLjiwrHMKShKxYxzGKiwNIeHsU4wWFVEtxVMTxYOQtxqN0dxrcZ14Cdi7xKfwUzuQB3rQKH2N+xmcNKZTMEBL24Yw4rUem1b8oXa9LKn0RBGpK3qnpsNpzf3SDJFZdJ/Odu5XQedXOZy+48qzNsOz0irEeLzTmHuxdlRL3q+gRIek1/TwUFRFN75CqPxmFuekzQyDABTWWurYNgLD1YtE=
 before_install:
-  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
-
+- echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 addons:
   coverity_scan:
     project:
-      name: "particle-man/fluent-plugin-tcp_mc"
-      description: "Fluentd raw tcp relay"
+      name: particle-man/fluent-plugin-tcp_mc
+      description: Fluentd raw tcp relay
     notification_email: ppippeng@cisco.com
-    build_command_prepend: ""
+    build_command_prepend: ''
     build_command: "--no-command"
     branch_pattern: coverity_scan
