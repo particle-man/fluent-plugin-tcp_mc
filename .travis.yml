@@ -1,0 +1,22 @@
+language: ruby
+rvm:
+ - 2.5.0
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "GIvwcKL8L+KhYgXfHQTMDdJkgLWwIt0oDP4I5a0BM9z4eW1GE//EfVRNbA4/TTFYV+u55l/WDCjD+a8aUTnrH3doh10Y+UTepnrftssUkL7IAEl3raoKb6AKttHa3jspNnULbdwVXqEqls8Fl8duwD+L7h/q6w+f2Lc2W9pOg7wpYuv6mvMUyF6JO126644HMJfNg0Ci2Se+trrGANHSQJ+a5mk77qxlL9gIQc/CejbxQdSMcP1T3T+vcPeiIofbdY23JrUocF/pAHxlASE4OV7akpW5MisBUlKvVxvUpC1qOtlA5Z8fRajbgSbj8OiIGzQhwEKA0j8mw4MXIInZPWA7yBpi+K8QkwKdILpQ/Np2o31qRCWa8OHLIxQbzLIhGIm+o8VD2yHecoxKrtwEXPNxNtYcPSN387WrkaXVQBZf8FnIqzCJoKY9dLU5vy6qL3yTYb+ZxIm1e32u+4BNlbUQHe93JcdF+5knYGLw7X0jcqSS/nm5SGwaHGAM6pY7bjBoF6yPvktjzT/XEmyhTXeRgSIYEe4tJnr488lUlSW5M+touiP4Za8di8/aaNA+dNQwlI0AFARi3ICqlwOvkyMRmbcGblBXAvQxQui7k+zsOjPGsTGIyUb7FlD8kpe42s82vat5nH/FiT6DRb9PISUpH0kBXpv0MpYidSYk8ks="
+
+before_install:
+  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "particle-man/fluent-plugin-tcp_mc"
+      description: "Fluentd raw tcp relay"
+    notification_email: ppippeng@cisco.com
+    build_command_prepend: ""
+    build_command: "--no-command"
+    branch_pattern: coverity_scan
