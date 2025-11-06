@@ -1,0 +1,83 @@
+name: Publish to RubyGems
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Build and Publish to RubyGems
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Publishing version $VERSION"
+
+      - name: Verify version matches gemspec
+        run: |
+          GEMSPEC_VERSION=$(ruby -e "spec = Gem::Specification::load('fluent-plugin-tcp_mc.gemspec'); puts spec.version")
+          TAG_VERSION=${{ steps.version.outputs.version }}
+          if [ "$GEMSPEC_VERSION" != "$TAG_VERSION" ]; then
+            echo "Error: gemspec version ($GEMSPEC_VERSION) does not match tag version ($TAG_VERSION)"
+            exit 1
+          fi
+          echo "Version verified: $GEMSPEC_VERSION"
+
+      - name: Build gem
+        run: |
+          gem build fluent-plugin-tcp_mc.gemspec
+          echo "Built gem:"
+          ls -lh *.gem
+
+      - name: Publish to RubyGems
+        env:
+          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+        run: |
+          mkdir -p ~/.gem
+          cat << EOF > ~/.gem/credentials
+          ---
+          :rubygems_api_key: ${RUBYGEMS_API_KEY}
+          EOF
+          chmod 0600 ~/.gem/credentials
+          gem push *.gem
+          rm ~/.gem/credentials
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            *.gem
+          body: |
+            ## Installation
+
+            ```bash
+            gem install fluent-plugin-tcp_mc -v ${{ steps.version.outputs.version }}
+            ```
+
+            Or in your Gemfile:
+
+            ```ruby
+            gem 'fluent-plugin-tcp_mc', '~> ${{ steps.version.outputs.version }}'
+            ```
+
+            See [CHANGELOG.md](https://github.com/particle-man/fluent-plugin-tcp_mc/blob/main/CHANGELOG.md) for details.

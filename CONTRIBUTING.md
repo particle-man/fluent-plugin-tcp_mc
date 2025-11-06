@@ -206,15 +206,12 @@ fluentd -c examples/basic.conf
 
 ## Release Process
 
-(For maintainers)
+Releases are automated via GitHub Actions! When a maintainer pushes a version tag, the gem is automatically:
+- Built and validated
+- Published to RubyGems.org
+- Released on GitHub with release notes
 
-1. Update version in `gemspec`
-2. Update `CHANGELOG.md` with release date
-3. Commit changes: `git commit -am "Release v0.X.0"`
-4. Create tag: `git tag v0.X.0`
-5. Push: `git push && git push --tags`
-6. Build gem: `gem build fluent-plugin-tcp_mc.gemspec`
-7. Publish: `gem push fluent-plugin-tcp_mc-0.X.0.gem`
+**For maintainers**: See [RELEASING.md](RELEASING.md) for detailed release instructions and setup.
 
 ## Getting Help
 

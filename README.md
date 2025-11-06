@@ -109,6 +109,15 @@ Potential future enhancements:
 
 Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
+## Development & Release
+
+- **CI/CD**: Automated testing on multiple Ruby versions (2.7-3.3)
+- **Security**: Weekly Anchore CVE scans with GitHub Security integration
+- **Releases**: Automated publishing to RubyGems via GitHub Actions
+- **Documentation**: Comprehensive examples and test suite
+
+For maintainers releasing new versions, see [RELEASING.md](RELEASING.md).
+
 ## Copyright
 
 * Copyright(c) 2017-2025 David Pippenger
