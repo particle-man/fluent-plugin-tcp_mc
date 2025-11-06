@@ -7,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["David Pippenger"]
   spec.email   = ["riven@particle-man.com"]
 
-  spec.summary       = %q{Purpose built plugin for fluentd to send json over tcp.}
-  spec.description   = %q{Purpose built plugin for fluentd to send json over tcp.}
+  spec.summary       = %q{Fluentd output plugin for sending JSON over TCP}
+  spec.description   = %q{A production-ready Fluentd output plugin that sends JSON-formatted log data to generic TCP endpoints with configurable timeouts, multi-worker support, and automatic failover between multiple servers.}
   spec.homepage      = "https://github.com/particle-man/fluent-plugin-tcp_mc"
   spec.license       = "Apache-2.0"
 
