@@ -8,32 +8,38 @@ This document describes how to release a new version of `fluent-plugin-tcp_mc` t
 - Commit access to the repository
 - Ability to push tags
 
-### 2. RubyGems API Key Setup
+### 2. RubyGems API Key Setup (MFA-Compatible)
 
-The repository uses GitHub Actions to automatically publish to RubyGems when a version tag is pushed. You need to set up the RubyGems API key as a GitHub secret (one-time setup):
+The repository uses GitHub Actions to automatically publish to RubyGems when a version tag is pushed. **This works with MFA-enabled accounts!**
 
-1. **Get your RubyGems API key**:
-   ```bash
-   # Login to rubygems.org
-   gem signin
+#### Setup Instructions
 
-   # Get your API key from ~/.gem/credentials
-   cat ~/.gem/credentials
-   ```
+1. **Create a scoped API key on RubyGems** (works with MFA):
+   - Visit: https://rubygems.org/profile/api_keys
+   - Click "**Create new API key**"
+   - **Name**: `GitHub Actions - fluent-plugin-tcp_mc`
+   - **Scopes**:
+     - ✅ Check "**Push rubygems**"
+     - ✅ Optionally restrict to specific gem: `fluent-plugin-tcp_mc`
+   - **Index rubygems**: Leave unchecked
+   - **MFA**: This key will work for CI/CD even with MFA enabled!
+   - Click "**Create**"
+   - **Copy the key immediately** (you won't see it again!)
 
 2. **Add the API key to GitHub Secrets**:
    - Go to: https://github.com/particle-man/fluent-plugin-tcp_mc/settings/secrets/actions
-   - Click "New repository secret"
+   - Click "**New repository secret**"
    - Name: `RUBYGEMS_API_KEY`
-   - Value: Paste your RubyGems API key (the string after `:rubygems_api_key:`)
-   - Click "Add secret"
+   - Value: Paste the API key you just created
+   - Click "**Add secret**"
 
-   **Note**: You can also create an API key specifically for GitHub Actions at https://rubygems.org/profile/api_keys:
-   - Click "Create new API key"
-   - Name it "GitHub Actions"
-   - Select scope: "Push rubygems"
-   - Click "Create"
-   - Copy the key and add it to GitHub secrets
+#### Important Notes
+
+- ✅ **MFA Support**: The workflow uses `rubygems/release-gem@v1` action which handles MFA-protected accounts
+- 🔒 **Scoped Keys**: Use scoped API keys (not your master key) for better security
+- 🎯 **Gem-Specific**: Optionally restrict the key to only this gem for extra security
+- ⚠️ **One-Time View**: Copy the API key immediately - you can't view it again later
+- 🔄 **Rotation**: Rotate keys periodically for security (regenerate and update the secret)
 
 ## Release Checklist
 

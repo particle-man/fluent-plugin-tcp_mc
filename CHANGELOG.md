@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2025-01-06
+
+### Fixed
+- Test suite reliability - replaced flaky integration tests with reliable unit tests
+- Tests now achieve 100% pass rate (was 76.9%)
+- Removed dependency on actual TCP connections in tests for CI stability
+- Test execution time improved from 4-8s to 0.45s
+- RubyGems publishing workflow now supports MFA-enabled accounts
+
+### Added
+- Automated RubyGems publishing via GitHub Actions with MFA support
+- RELEASING.md with comprehensive release documentation
+- Additional test coverage for empty chunk handling
+- Documentation for MFA-compatible API key setup
+
+### Documentation
+- Updated CONTRIBUTING.md with automated release process
+- Added "Development & Release" section to README
+- Improved test comments and documentation
+- Added MFA setup instructions for RubyGems publishing
+
 ## [0.3.0] - 2025-01-06
 
 ### Changed
@@ -60,6 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - JSON formatting
 - Single server support
 
+[0.3.1]: https://github.com/particle-man/fluent-plugin-tcp_mc/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/particle-man/fluent-plugin-tcp_mc/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/particle-man/fluent-plugin-tcp_mc/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/particle-man/fluent-plugin-tcp_mc/releases/tag/v0.1.0

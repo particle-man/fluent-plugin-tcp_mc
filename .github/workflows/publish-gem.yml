@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write  # Required for OIDC Trusted Publishing
 
 jobs:
   publish:
@@ -46,18 +47,10 @@ jobs:
           echo "Built gem:"
           ls -lh *.gem
 
-      - name: Publish to RubyGems
-        env:
-          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
-        run: |
-          mkdir -p ~/.gem
-          cat << EOF > ~/.gem/credentials
-          ---
-          :rubygems_api_key: ${RUBYGEMS_API_KEY}
-          EOF
-          chmod 0600 ~/.gem/credentials
-          gem push *.gem
-          rm ~/.gem/credentials
+      - name: Publish to RubyGems (with MFA support)
+        uses: rubygems/release-gem@v1
+        with:
+          gem-token: ${{ secrets.RUBYGEMS_API_KEY }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
