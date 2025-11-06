@@ -17,11 +17,19 @@ require 'fluent/plugin/output'
 require 'time'
 require 'yajl'
 
-module Fluent
-  class Tcp_mcOutput < BufferedOutput
-    Plugin.register_output('tcp_mc', self)
+module Fluent::Plugin
+  class Tcp_mcOutput < Fluent::Plugin::Output
+    Fluent::Plugin.register_output('tcp_mc', self)
     
-    helpers :compat_parameters, :formatter, :inject
+    helpers :formatter, :inject
+
+    config_param :send_timeout, :time, :default => 60
+    config_param :connect_timeout, :time, :default => 5
+
+    config_section :buffer do
+      config_set_default :@type, 'memory'
+      config_set_default :chunk_keys, ['tag']
+    end
 
     def initialize
       super
@@ -31,22 +39,17 @@ module Fluent
       @nodes = []  #=> [Node]
     end
 
-    config_param :send_timeout, :time, :default => 60
-    config_param :connect_timeout, :time, :default => 5
-    config_param :include_time_key, :bool, :default => true
     attr_reader :nodes
 
     def configure(conf)
       super
-
-      compat_parameters_convert(conf, :buffer, :formatter, :inject)
 
       conf.elements.each do |e|
         next if e.name != "server"
 
         host = e['host']
         port = e['port']
-        port = port ? port.to_i : DEFAULT_LISTEN_PORT
+        port = port.to_i if port
 
         name = e['name']
         unless name
@@ -58,6 +61,8 @@ module Fluent
         @nodes << RawNode.new(name, host, port)
         log.info "adding forwarding server '#{name}'", :host=>host, :port=>port
       end
+
+      raise Fluent::ConfigError, "no server configured" if @nodes.empty?
     end
 
     def multi_workers_ready?
@@ -73,7 +78,7 @@ module Fluent
     end
 
     def format(tag, time, record)
-       r = inject_values_to_record(tag, time, record)
+      r = inject_values_to_record(tag, time, record)
       [tag, time, r].to_msgpack
     end
 
@@ -86,8 +91,9 @@ module Fluent
         begin
           send_data(node, chunk)
           return
-        rescue
-          error = $!
+        rescue StandardError => e
+          error = e
+          log.warn "failed to send data to #{node.name}: #{e.message}"
         end
       end
 
@@ -96,6 +102,7 @@ module Fluent
     end
 
     private
+
     def send_data(node, chunk)
       sock = connect(node)
       begin
@@ -106,12 +113,11 @@ module Fluent
         sock.setsockopt(Socket::SOL_SOCKET, Socket::SO_SNDTIMEO, opt)
 
         chunk.msgpack_each do |tag, time, record|
-          next unless record.is_a? Hash
-          #log.debug ("#{record}")
+          next unless record.is_a?(Hash)
           sock.write("#{Yajl.dump(record)}\n")
         end
       ensure
-        sock.close
+        sock.close if sock
       end
     end
 
