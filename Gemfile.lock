@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fluent-plugin-tcp_mc (0.3.0)
+    fluent-plugin-tcp_mc (0.3.1)
       fluentd (>= 0.14.10, < 2)
       yajl-ruby (~> 1.4)
 
