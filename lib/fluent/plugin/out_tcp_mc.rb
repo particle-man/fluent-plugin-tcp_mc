@@ -21,7 +21,7 @@ module Fluent::Plugin
   class Tcp_mcOutput < Fluent::Plugin::Output
     Fluent::Plugin.register_output('tcp_mc', self)
     
-    helpers :formatter, :inject
+    helpers :inject
 
     config_param :send_timeout, :time, :default => 60
     config_param :connect_timeout, :time, :default => 5
@@ -55,8 +55,6 @@ module Fluent::Plugin
         unless name
           name = "#{host}:#{port}"
         end
-
-        @formatter = formatter_create
 
         @nodes << RawNode.new(name, host, port)
         log.info "adding forwarding server '#{name}'", :host=>host, :port=>port
